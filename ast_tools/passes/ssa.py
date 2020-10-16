@@ -330,10 +330,12 @@ def _prove_names_defined(
         if isinstance(node.ctx, ast.Store):
             names.add(node.id)
         elif node.id not in names and node.id not in env:
-            if hasattr(node, 'lineno'):
-                raise SyntaxError(f'Cannot prove name, {node.id}, is defined at line {node.lineno}')
-            else:
-                raise SyntaxError(f'Cannot prove name, {node.id}, is defined')
+            breakpoint()
+            if node.id not in env["__builtins__"].__dict__:
+                if hasattr(node, 'lineno'):
+                    raise SyntaxError(f'Cannot prove name, {node.id}, is defined at line {node.lineno}')
+                else:
+                    raise SyntaxError(f'Cannot prove name, {node.id}, is defined')
 
     elif isinstance(node, ast.If):
         t_returns = _always_returns(node.body)
